@@ -94,9 +94,9 @@
 <body>
   <div id="app">
     <header>
-      <h1>Delta JSON Web Browser</h1>
-      <label for="fileInput">Upload JSON</label>
-      <input type="file" id="fileInput" accept=".json">
+      <h1>Delta</h1>
+      <label for="fileInput">Upload DELTA File</label>
+      <input type="file" id="fileInput" accept=".delta">
     </header>
     <div class="toolbar">
       <input type="text" id="domainInput" placeholder="Enter URL (e.g., delta://example.com)">
@@ -117,9 +117,9 @@
           try {
             websites = JSON.parse(e.target.result);
             document.getElementById('loadButton').disabled = false;
-            alert('JSON file loaded successfully!');
+            alert('DELTA file loaded successfully!');
           } catch (error) {
-            alert('Error loading JSON file: ' + error.message);
+            alert('Error loading DELTA file: ' + error.message);
           }
         };
         reader.readAsText(file);
