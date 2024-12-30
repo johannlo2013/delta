@@ -1,11 +1,12 @@
 {
     "example.com": {
-      "html": "<h1>Welcome to Example.com</h1><p>This is the example website.</p>"
+      "html": "<!DOCTYPE html><html lang='en'><head><title>Example</title></head><body><h1>Welcome to Example.com</h1><p>This is the example website.</p></body></html>"
     },
     "testsite.com": {
-      "html": "<h1>Welcome to TestSite</h1><p>This is another test website.</p>"
+      "html": "<!DOCTYPE html><html lang='en'><head><title>TestSite</title></head><body><h1>Welcome to TestSite</h1><p>This is another test website.</p></body></html>"
     },
     "mywebsite.com": {
-      "html": "<h1>My Personal Website</h1><p>Thanks for visiting!</p>"
+      "html": "<!DOCTYPE html><html lang='en'><head><title>My Website</title></head><body><h1>My Personal Website</h1><p>Thanks for visiting!</p></body></html>"
     }
   }
+  
