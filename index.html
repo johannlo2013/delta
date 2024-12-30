@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Web Browser</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background: #f4f4f4;
+    }
+    input[type="file"],
+    input[type="text"],
+    button {
+      margin: 5px;
+    }
+    iframe {
+      flex-grow: 1;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>JSON Web Browser</h1>
+    </header>
+    <div class="toolbar">
+      <input type="file" id="fileInput" accept=".json">
+      <input type="text" id="domainInput" placeholder="Enter domain (e.g., example.com)">
+      <button onclick="loadWebsite()">Load Website</button>
+    </div>
+    <iframe id="webView"></iframe>
+  </div>
+
+  <script>
+    let websites = {};
+
+    // Handle JSON file input
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            websites = JSON.parse(e.target.result);
+            alert('JSON file loaded successfully!');
+          } catch (error) {
+            alert('Error loading JSON file: ' + error.message);
+          }
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    // Load the website content based on domain input
+    function loadWebsite() {
+      const domain = document.getElementById('domainInput').value.trim();
+      const iframe = document.getElementById('webView');
+      if (websites[domain]) {
+        iframe.srcdoc = websites[domain].html;
+      } else {
+        iframe.srcdoc = `<h1 style="text-align: center; color: red;">Website not found</h1>`;
+      }
+    }
+  </script>
+</body>
+</html>
