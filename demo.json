@@ -1,0 +1,11 @@
+{
+    "example.com": {
+      "html": "<h1>Welcome to Example.com</h1><p>This is the example website.</p>"
+    },
+    "testsite.com": {
+      "html": "<h1>Welcome to TestSite</h1><p>This is another test website.</p>"
+    },
+    "mywebsite.com": {
+      "html": "<h1>My Personal Website</h1><p>Thanks for visiting!</p>"
+    }
+  }
