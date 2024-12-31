@@ -1,10 +1,10 @@
 {
   "example.com": {
-    "developer": "John Doe",
-    "html": "<html><body><h1>Welcome to Example.com</h1><p>This is a sample website.</p></body></html>"
+    "developer": "DELTA",
+    "html": "<html><body><h1>Example Domain</h1><p>This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.</p></body></html>"
   },
-  "mywebsite.org": {
-    "developer": "Jane Smith",
-    "html": "<html><body><h1>Welcome to MyWebsite</h1><p>Enjoy browsing!</p></body></html>"
+  "delta.thesunbeaming.co": {
+    "developer": "DELTA",
+    "html": "<html><body><h1>DELTA WB Instructions</h1><p>Browsing the internet can be frustrating at times. There is no moderation on the internet, so it is very unsafe. There are 367 million domains out there, and sooner or later, the world will run out of domains.</p><p>To solve that issue, we invented a new World Wide Web. Every website is a file that you can modify, and you can choose to use other developer's DELTA files too.</p></body></html>"
   }
 }
