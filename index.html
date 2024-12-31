@@ -1,159 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Delta WB - Secure JSON-based web browser</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
-
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      background-color: #f4f4f4;
-    }
-
-    #app {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-
-    header {
-      background-color: #f5f5f5;
-      border-bottom: 1px solid #ddd;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    header h1 {
-      font-size: 16px;
-      font-weight: 700;
-      margin: 0;
-    }
-
-    .toolbar {
-      background: #eaeaea;
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      gap: 10px;
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-
-    label[for="fileInput"] {
-      background: #4285f4;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    input[type="text"] {
-      flex-grow: 1;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
-    button {
-      background: #34a853;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 500;
-    }
-
-    button:hover,
-    label:hover {
-      opacity: 0.9;
-    }
-
-    button:disabled {
-      background: #bbb;
-      cursor: not-allowed;
-    }
-
-    iframe {
-      flex-grow: 1;
-      border: none;
-      background-color: white;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delta WB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .hidden {
+            display: none;
+        }
+        #browser-interface {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #tabs {
+            display: flex;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #e2e2e2;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .tab.active {
+            background-color: white;
+            border-bottom: none;
+        }
+        #search-bar {
+            margin: 10px;
+            display: flex;
+        }
+        #search-bar input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        iframe {
+            flex: 1;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-  <div id="app">
-    <header>
-      <h1>Delta WB</h1>
-      <label for="fileInput">Upload DELTA File</label>
-      <input type="file" id="fileInput" accept=".delta">
-    </header>
-    <div class="toolbar">
-      <input type="text" id="domainInput" placeholder="Enter URL (e.g., delta://example.com)">
-      <button onclick="loadWebsite()" id="loadButton" disabled>Go</button>
+    <div id="upload-page" class="container">
+        <h1>Delta WB</h1>
+        <p>A minimal browser for websites in DELTA format.</p>
+        <input type="file" id="delta-file" accept=".delta">
+        <button id="load-browser">Load Browser</button>
     </div>
-    <iframe id="webView"></iframe>
-  </div>
 
-  <script>
-    let websites = {};
+    <div id="browser-interface" class="hidden">
+        <div id="tabs"></div>
+        <div id="search-bar">
+            <input type="text" id="search-input" placeholder="Enter a domain and press Enter">
+        </div>
+        <iframe id="content-viewer"></iframe>
+    </div>
 
-    // Handle JSON file input
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          try {
-            websites = JSON.parse(e.target.result);
-            document.getElementById('loadButton').disabled = false;
-            alert('DELTA file loaded successfully!');
-          } catch (error) {
-            alert('Error loading DELTA file: ' + error.message);
-          }
-        };
-        reader.readAsText(file);
-      }
-    });
+    <script>
+        let websites = {};
 
-    // Load the website content based on domain input
-    function loadWebsite() {
-      const input = document.getElementById('domainInput').value.trim();
-      const iframe = document.getElementById('webView');
+        const deltaFileInput = document.getElementById('delta-file');
+        const loadBrowserButton = document.getElementById('load-browser');
+        const uploadPage = document.getElementById('upload-page');
+        const browserInterface = document.getElementById('browser-interface');
+        const searchInput = document.getElementById('search-input');
+        const contentViewer = document.getElementById('content-viewer');
+        const tabs = document.getElementById('tabs');
 
-      // Validate prefix
-      if (!input.startsWith('delta://')) {
-        iframe.srcdoc = `<h1 style="text-align: center; color: red; font-family: Inter;">Invalid URL</h1>
-                         <p style="text-align: center; font-family: Inter;">URLs must start with delta://</p>`;
-        return;
-      }
+        function createTab(domain) {
+            const tab = document.createElement('div');
+            tab.classList.add('tab');
+            tab.textContent = domain;
+            tab.addEventListener('click', () => {
+                setActiveTab(tab, domain);
+            });
+            tabs.appendChild(tab);
+        }
 
-      // Extract domain from delta://
-      const domain = input.replace('delta://', '');
-      if (websites[domain]) {
-        iframe.srcdoc = websites[domain].html;
-      } else {
-        iframe.srcdoc = `<h1 style="text-align: center; color: red; font-family: Inter;">Website not found</h1>
-                         <p style="text-align: center; font-family: Inter;">Please check the domain name and try again.</p>`;
-      }
-    }
+        function setActiveTab(tab, domain) {
+            const allTabs = document.querySelectorAll('.tab');
+            allTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            contentViewer.srcdoc = websites[domain].html;
+        }
 
-    // Enable Enter/Return key to trigger "Go"
-    document.getElementById('domainInput').addEventListener('keypress', function(event) {
-      if (event.key === 'Enter') {
-        loadWebsite();
-      }
-    });
-  </script>
+        loadBrowserButton.addEventListener('click', () => {
+            const file = deltaFileInput.files[0];
+            if (file && file.name.endsWith('.delta')) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        websites = JSON.parse(event.target.result);
+                        uploadPage.classList.add('hidden');
+                        browserInterface.classList.remove('hidden');
+                        // Create tabs for all websites
+                        Object.keys(websites).forEach(domain => createTab(domain));
+                    } catch (e) {
+                        alert('Invalid DELTA file format.');
+                    }
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Please upload a valid DELTA file.');
+            }
+        });
+
+        searchInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                const domain = searchInput.value;
+                if (websites[domain]) {
+                    createTab(domain);
+                    setActiveTab(document.querySelector(`.tab:last-child`), domain);
+                } else {
+                    alert('Website not found in the DELTA file.');
+                }
+            }
+        });
+    </script>
 </body>
 </html>

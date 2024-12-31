@@ -1,9 +1,0 @@
-{
-    "example.com": {
-      "html": "<!DOCTYPE html><html lang='en'><head><title>Example</title></head><body><h1>Example Domain</h1><p>This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.</p><p><a href='https://www.iana.org/help/example-domains'>More information...</a></p></body></html>"
-    },
-    "testsite.com": {
-      "html": "<!DOCTYPE html><html lang='en'><head><title>______</title></head><body><h1>_______</h1><p>_________________________________</p></body></html>"
-    }
-  }
-  

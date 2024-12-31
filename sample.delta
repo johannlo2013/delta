@@ -1,0 +1,10 @@
+{
+  "example.com": {
+    "developer": "John Doe",
+    "html": "<html><body><h1>Welcome to Example.com</h1><p>This is a sample website.</p></body></html>"
+  },
+  "mywebsite.org": {
+    "developer": "Jane Smith",
+    "html": "<html><body><h1>Welcome to MyWebsite</h1><p>Enjoy browsing!</p></body></html>"
+  }
+}
