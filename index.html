@@ -67,6 +67,7 @@
         iframe {
             flex: 1;
             border: none;
+            font-family: 'Inter', sans-serif;
         }
     </style>
 </head>
@@ -124,7 +125,7 @@
             const allTabs = document.querySelectorAll('.tab');
             allTabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
-            contentViewer.srcdoc = websites[domain].html;
+            contentViewer.srcdoc = `<style>body { font-family: 'Inter', sans-serif; }</style>` + websites[domain].html;
         }
 
         loadBrowserButton.addEventListener('click', () => {
