@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delta WB</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
         }
@@ -37,10 +39,19 @@
             background-color: #e2e2e2;
             border: 1px solid #ccc;
             border-radius: 4px;
+            position: relative;
         }
         .tab.active {
             background-color: white;
             border-bottom: none;
+        }
+        .tab .close-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 12px;
+            padding: 2px 5px;
+            cursor: pointer;
         }
         #search-bar {
             margin: 10px;
@@ -70,7 +81,7 @@
     <div id="browser-interface" class="hidden">
         <div id="tabs"></div>
         <div id="search-bar">
-            <input type="text" id="search-input" placeholder="Enter a domain and press Enter">
+            <input type="text" id="search-input" placeholder="Enter a domain with prefix delta:// and press Enter">
         </div>
         <iframe id="content-viewer"></iframe>
     </div>
@@ -90,6 +101,19 @@
             const tab = document.createElement('div');
             tab.classList.add('tab');
             tab.textContent = domain;
+
+            const closeButton = document.createElement('span');
+            closeButton.textContent = '×';
+            closeButton.classList.add('close-btn');
+            closeButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                tab.remove();
+                if (tabs.children.length === 0) {
+                    contentViewer.srcdoc = '';
+                }
+            });
+            tab.appendChild(closeButton);
+
             tab.addEventListener('click', () => {
                 setActiveTab(tab, domain);
             });
@@ -112,8 +136,6 @@
                         websites = JSON.parse(event.target.result);
                         uploadPage.classList.add('hidden');
                         browserInterface.classList.remove('hidden');
-                        // Create tabs for all websites
-                        Object.keys(websites).forEach(domain => createTab(domain));
                     } catch (e) {
                         alert('Invalid DELTA file format.');
                     }
@@ -126,7 +148,13 @@
 
         searchInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
-                const domain = searchInput.value;
+                const domainInput = searchInput.value;
+                const prefix = "delta://";
+                if (!domainInput.startsWith(prefix)) {
+                    alert('Domain must start with "delta://"');
+                    return;
+                }
+                const domain = domainInput.slice(prefix.length);
                 if (websites[domain]) {
                     createTab(domain);
                     setActiveTab(document.querySelector(`.tab:last-child`), domain);
